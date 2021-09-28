@@ -97,17 +97,25 @@ import express, {Request, Response, NextFunction} from 'express'
 
 const app = express()
 
+==>app.use(express.json())
+
+==>app.use(express.urlencoded({extended:true}))
+
 const port = 3000
 
 const host = `http://localhost:${port}/status`
 
 
 
-app.get('/status', (*req*:*Request*, *res*: *Response*, *next*: *NextFunction*)=>{
+~~*app.get('/status', (req:Request, res: Response, next: NextFunction)=>{*~~
 
-  *res*.status(200).send({obj:'bar'}) //200 é padrão  para status send ok
+  ~~*res.status(200).send({obj:'bar'}) //200 é padrão  para status send ok*~~
 
-})
+~~*})*~~
+
+<b>A linha acima será substituida pela linha abaixo</b>
+
+==> app.user(statusRoute)
 
 
 
@@ -141,13 +149,15 @@ app.listen(port,()=>{
 >
 > const usersRoute = Router()
 >
+> <h6>Buscador e todos os  Usuario</h6>
+>
 > <b>//configurando get/users :</b>
 >
 > userRoute.get('/users', ((*req*: *Request*, *res*: *Response*, *next*: *NextFunction* )=>{
 >
->   const users = [{userName:' '}]
+> const users = [{userName:' '}]
 >
->   *res*.status(200).send(users)
+> *res*.status(200).send(users)
 >
 > })
 >
@@ -161,7 +171,9 @@ app.listen(port,()=>{
 >
 > app.use(userRoute)
 
-<p style = 'blue'><b >//configurando get/users/:uuid :</b></p>
+<h6>Buscando usuario por id</h6>
+
+<p style.color = 'blue'><b >//configurando get/users/:uuid :</b></p>
 
 ​	userRoute.get('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Response*, *next*: *NextFunction*) =>{
 
@@ -171,3 +183,121 @@ app.listen(port,()=>{
 
 })
 
+<h4>o que é status code?</h4>
+
+padronização do que acontece com uma requisição. 200= ok
+
+alternativamente a digitar os números pode ser criada constantes a partir de um pacote:
+
+<h5>comando : npm install --save http-status-codes </h5>
+
+import {StatusCodes} from 'http-status-codes'
+
+***no lugar de (200) colocar ''*StatusCodes.OK":
+
+> *res*.status(*StatusCodes*.OK).send(users)
+
+
+
+<h6>Criando Usuario</h6>
+
+
+<p style = 'blue'><b >//configurando post/users : </b></p>
+
+usersRoute.post('/users', (*req*: *Request*, *res*: *Response*, *next*: *NextFunction* )=>{
+
+​		const newUser = req.body
+
+​		res.status(StatusCodes.CREATED).send(newUser)
+
+​		<b>***testar se deu certo : console.log(req.body)</b>
+
+})
+
+==>paralelo a isso deve ser configurado no arquivo index.ts para que o app transforme em json a informação vinda do insomnia ou postman
+
+  ==>app.use(express.json())
+
+​	==>app.use(express.urlencoded({extended:true}))
+
+> No Postman
+>
+> . jogar a URL
+>
+> .POST
+>
+> . Em 'Body' selecionat x-www-form-urlencoded
+>
+> .Digitar os elementos do objeto
+>
+> .Sen
+>
+> d
+>
+> 
+
+<h6>Alterando Usuario</h6>
+
+<p style = 'blue'><b >//configurando put/users/:uuid : </b></p>
+
+usersRoute.put('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Response*, *next*: *NextFunction*)=>{
+
+​	const uuid = req.params.uuid
+
+​	const modifiUser = *req*.body
+
+  	modifiUser.uuid = uuid
+
+ ****para verificar se está rodando certo :  console.log(modifiUser)
+
+  *res*.status(*StatusCodes*.OK).send(modifiUser)
+
+}
+
+
+
+> altera o usuario pelo numero de id no postman para conferir
+
+
+
+<h6>Deletando Usuario</h6>
+
+<p style = 'blue'><b >//configurando delete/users/:uuid : </b></p>
+
+<h1>7 -Melhorando a rota de status</h1>
+
+Pasta routes --> novo arquivo: status.routes.ts
+
+<b>configurando o arquivo status.routes.ts</b>
+
+import {Router, NextFunction, Response, request} from 'express'
+
+import {StatusCodes} from 'http-status-codes'
+
+
+
+const statusRoute = Router()
+
+
+
+statusRoute.get('/status', ((*req*:*Request*, *res*: *Response*, *next*:*NextFunction*)=>{
+
+res.sendStatus(StatusCodes.OK)
+
+})
+
+
+
+export default statusRoute
+
+> a seguir, na pasta index.ts, apaga  alinha:
+>
+> *<u>"app.get('/status', (req:Request, res: Response, next: NextFunction)=>{</u>*
+>
+>   *<u>res.status(200).send({obj:'bar'}) //200 é padrão  para status send ok</u>*
+>
+> *<u>})"</u>*
+>
+> 
+
+pela linha : app.user(statusRoute)
