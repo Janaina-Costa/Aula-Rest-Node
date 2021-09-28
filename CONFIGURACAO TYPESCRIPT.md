@@ -1,12 +1,12 @@
-<h6>Este projeto visa criar uma aplicação para criação, alteração, e exlusão de usuario e senha a partir do node e biblioteca express/h6>
+<h6>Este projeto visa criar uma aplicação para busca, criação, alteração, e exlusão de usuario e senha a partir do node e biblioteca express/h6>
 
 
 
-<h1>1 -Criando aplicação com node</h1>
+<h1 style='background-color: yellow'>1 -Configuração geral</h1>
 
-<h5>comando: npm init </h5>
+<p style = 'color:blue'>//configuração basica package.json</p>
 
-//configuração basica package.json
+<h5 style = 'color : red'>comando: npm init </h5>
 
 {
   "name": "ms-authentication",
@@ -35,13 +35,14 @@
 
 
 
-<h1>2 -Criando projeto com typescript</h1>
+<h4 style = 'color:green'>Instalando typescript</h4>
 
-<h5>comando: npm install -g typescript</h5>
+<h5 style='color:red'>comando: npm install -g typescript</h5>
 
-<h5>comando: tsc --init</h5>
+<h5 style='color:red'>comando: tsc --init</h5>
 
-//consfiguração basica tsconfig
+<p style = 'color:blue'>//consfiguração basica tsconfig</p>
+
 {
   "compilerOptions": {
     "target": "es2019",                                   
@@ -61,37 +62,43 @@
 }
 }
 
-//criar pastas:
+<p style='color:orange' >//criar pastas:</p>
 
-> pasta: src -> pasta: @types -->arquivo: index. ts
+> pasta: src ->  criar arquivo: index. ts 
+>
+> na pasta :src =>  pasta: @types
 
 > pasta: dist
 
-<h1>3 - Converter arquivo index.ts em index.js</h1>
-
-<h5>comando: npm install --save-dev typescript</h5>
-
-<h5>comando: npm install --save-dev @types/node</h5>
-
-<h5>comando: npm run build</h5>
-
-//o arquivo index.ts é convertido e criado na pasta dist como index.js
 
 
+<h4 style='color:green'> Converter arquivo index.ts em index.js</h4>
 
-<h1>4 - Criando um servidor - express</h1>
+<h5 style='color:red'>comando: npm install --save-dev typescript</h5>
 
-//Baixando a dependência express
+<h5 style='color:red'>comando: npm install --save-dev @types/node</h5>
 
-<h5>comando: npm install --save express</h5>
+<u>==> escrever no package json -> script :  "build":"tsc -p ."</u>
 
-//Baixando o types express
+<h5 style='color:red'>comando: npm run build</h5>
 
-<h5>comando: npm install --save-dev @types/express</h5>
+<u>//o arquivo index.ts é convertido e criado na pasta dist como index.js</u>
 
 
 
-<h4>no arquivo index.ts</h4>
+<h4 style="color:green"> Criando um servidor com express</h4>
+
+<p style = 'color:blue'>//Baixando a dependência express</p>
+
+<h5 style='color:red'>comando: npm install --save express</h5>
+
+<p style = 'color:blue'>//Baixando o types express</p>
+
+<h5 style='color:red'>comando: npm install --save-dev @types/express</h5>
+
+
+
+<h4 style='color:green'>No arquivo index.ts digitar ...</h4>
 
 import express, {Request, Response, NextFunction} from 'express'
 
@@ -101,108 +108,111 @@ const app = express()
 
 ==>app.use(express.urlencoded({extended:true}))
 
-const port = 3000
+<!--*app.get('/status', (req:Request, res: Response, next: NextFunction)=>{*-->
 
-const host = `http://localhost:${port}/status`
+  <!--*res.status(200).send({obj:'bar'}) //200 é padrão  para status send ok*-->
 
+<!--*})-->*
 
+<b>A linha acima será substituida pela linha abaixo quando for feira a refatoração do users.status</b>
 
-~~*app.get('/status', (req:Request, res: Response, next: NextFunction)=>{*~~
-
-  ~~*res.status(200).send({obj:'bar'}) //200 é padrão  para status send ok*~~
-
-~~*})*~~
-
-<b>A linha acima será substituida pela linha abaixo</b>
-
-==> app.user(statusRoute)
+<u>==> app.user(statusRoute)</u>
 
 
 
-app.listen(port,()=>{
+app.listen(3000,()=>{
 
-  console.log(`Aplicação executando na porta ${host}`)
+  console.log(`Aplicação executando na porta 3000`)
 
 })
 
 
 
-<h1>5 - Automatizando o servidor</h1>
+<h4 style='color:green'> Automatizando o servidor</h4>
 
-<h5>comando : npm install --save-dev ts-node-dev</h5>
+<h5 style='color:red'>comando : npm install --save-dev ts-node-dev</h5>
 
-> Incluir o código no script do package.json: 
+Incluir o código no script do package.json: 
+
+"dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts"
+
+<h5 style='color:red'>comando : npm run dev</h5>
+
+
+
+
+
+<h1 style='background-color: yellow'>2 -Criando rotas apartadas para os usuários</h1>
+
+> <p style='color:orange'>Criar na pasta src ==> pasta :routes  --> arquivo:users.route.ts</p>
 >
->  "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts"
-
-<h5>comando : npm run dev</h5>
-
-<h1>6 -Criando rotas apartadas para o usuário</h1>
-
-> Criar pasta: routes  --> arquivo:users.route.ts
->
-> Importar no arquivo users.route.ts: 
+> <h4 style='color:green'>No arquivo users.route.ts digitar...</h4>
 >
 > import { Router, Request, Response, NextFunction } from "express";
 >
-> <b>//criar uma instancia para o Router:</b>
+> import {StatusCodes} from 'http-status-codes'
 >
 > const usersRoute = Router()
->
-> <h6>Buscador e todos os  Usuario</h6>
->
-> <b>//configurando get/users :</b>
->
-> userRoute.get('/users', ((*req*: *Request*, *res*: *Response*, *next*: *NextFunction* )=>{
->
-> const users = [{userName:' '}]
->
-> *res*.status(200).send(users)
->
-> })
->
-> <b>//exportando</b>
->
-> export default usersRoute
 
-> <b>Após isso importar no arquivo index.ts</b>
->
-> import usersRoute from './routes/users.route'
->
-> app.use(userRoute)
 
-<h6>Buscando usuario por id</h6>
 
-<p style.color = 'blue'><b >//configurando get/users/:uuid :</b></p>
+<h4 style='background-color:pink'>o que é status code?</h4>
 
-​	userRoute.get('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Response*, *next*: *NextFunction*) =>{
-
-​	 const uuid = req.params.uuid
-
-​	res.status(200).send({uuid})
-
-})
-
-<h4>o que é status code?</h4>
-
-padronização do que acontece com uma requisição. 200= ok
+Padronização do que acontece com uma requisição http. ex: 200= OK
 
 alternativamente a digitar os números pode ser criada constantes a partir de um pacote:
 
 <h5>comando : npm install --save http-status-codes </h5>
 
-import {StatusCodes} from 'http-status-codes'
+importa :import {StatusCodes} from 'http-status-codes'
 
-***no lugar de (200) colocar ''*StatusCodes.OK":
+*** e no lugar de (200) colocar ''*StatusCodes.OK":
 
+ex: *res*.status(*StatusCodes*.OK).send(users)
+
+
+
+
+
+> <h6 style='color:purple'>Buscador de todos os  Usuario</h6>
+>
+> <p style='color:blue'>//configurando get/users :</p>
+>
+> userRoute.get('/users', ((*req*: *Request*, *res*: *Response*, *next*: *NextFunction* )=>{
+>
+> const users = [{userName:' '}]
+>
 > *res*.status(*StatusCodes*.OK).send(users)
+>
+> })
+
+> <u><b>Após isso importar no arquivo index.ts</b></u>
+>
+> import usersRoute from './routes/users.route'
+>
+> app.use(userRoute)
 
 
 
-<h6>Criando Usuario</h6>
 
 
-<p style = 'blue'><b >//configurando post/users : </b></p>
+> <h6 style='color:purple'>Buscando usuario por id</h6>
+
+<p style = 'color:blue'><b >//configurando get/users/:uuid :</b></p>
+
+​	userRoute.get('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Response*, *next*: *NextFunction*) =>{
+
+​	 const uuid = req.params.uuid
+
+​	res.status(*StatusCodes*.OK).send({uuid})
+
+})
+
+
+
+<h6 style='color:purple'>Criando Usuario</h6>
+
+<p style = 'color:blue'><b >//configurando post/users : </b></p>
 
 usersRoute.post('/users', (*req*: *Request*, *res*: *Response*, *next*: *NextFunction* )=>{
 
@@ -214,7 +224,7 @@ usersRoute.post('/users', (*req*: *Request*, *res*: *Response*, *next*: *NextFun
 
 })
 
-==>paralelo a isso deve ser configurado no arquivo index.ts para que o app transforme em json a informação vinda do insomnia ou postman
+<u>==>Paralelo a isso deve ser configurado no arquivo index.ts para que o app transforme em json a informação vinda do insomnia ou postman</u>
 
   ==>app.use(express.json())
 
@@ -230,15 +240,13 @@ usersRoute.post('/users', (*req*: *Request*, *res*: *Response*, *next*: *NextFun
 >
 > .Digitar os elementos do objeto
 >
-> .Sen
->
-> d
+> .Send
 >
 > 
 
-<h6>Alterando Usuario</h6>
+<h6 style='color:purple'>Alterando Usuario</h6>
 
-<p style = 'blue'><b >//configurando put/users/:uuid : </b></p>
+<p style = 'color:blue'><b >//configurando put/users/:uuid : </b></p>
 
 usersRoute.put('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Response*, *next*: *NextFunction*)=>{
 
@@ -248,27 +256,43 @@ usersRoute.put('/users/:uuid', (*req*: *Request*<{uuid : *string*}>, *res*: *Res
 
   	modifiUser.uuid = uuid
 
- ****para verificar se está rodando certo :  console.log(modifiUser)
+ *****para verificar se está rodando certo :  console.log(modifiUser)*
 
   *res*.status(*StatusCodes*.OK).send(modifiUser)
 
 }
 
-
-
-> altera o usuario pelo numero de id no postman para conferir
+> *altera o usuario pelo numero de id no postman para conferir*
 
 
 
-<h6>Deletando Usuario</h6>
+<h6 style='color:purple'>Deletando Usuario</h6>
 
-<p style = 'blue'><b >//configurando delete/users/:uuid : </b></p>
+<p style = 'color:blue'><b >//configurando delete/users/:uuid : </b></p>
 
-<h1>7 -Melhorando a rota de status</h1>
+usersRoute.delete('/users/:uuid', (req:Request, res:Response, next:NextFunction)=>{
 
-Pasta routes --> novo arquivo: status.routes.ts
+​	const uuid = req.params.uuid
 
-<b>configurando o arquivo status.routes.ts</b>
+​	res.sendStatus(StatusCode.OK)
+
+})
+
+
+
+<p style='color:blue'><b>//Exportando</b></p>
+
+export default usersRoute
+
+
+
+
+
+<h1 style='background-color:pink'>Melhorando a rota de status</h1>
+
+<p style='color:orange'>Pasta routes --> novo arquivo: status.routes.ts</p>
+
+<p style = 'color:blue'><b>//configurando o arquivo status.routes.ts</b></p>
 
 import {Router, NextFunction, Response, request} from 'express'
 
@@ -286,9 +310,11 @@ res.sendStatus(StatusCodes.OK)
 
 })
 
-
-
 export default statusRoute
+
+
+
+
 
 > a seguir, na pasta index.ts, apaga  alinha:
 >
@@ -300,4 +326,4 @@ export default statusRoute
 >
 > 
 
-pela linha : app.user(statusRoute)
+Inclui a  linha : app.user(statusRoute)
